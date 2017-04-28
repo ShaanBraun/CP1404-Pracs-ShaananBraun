@@ -4,7 +4,7 @@ def main():
     ruby = ProgrammingLanguage("Ruby", "Dynamic", True, 1995)
     python = ProgrammingLanguage("Python", "Dynamic", True, 1991)
     vb = ProgrammingLanguage("Visual Basic", "Static", False, 1991)
-    languages = [ruby, python, vb]\
+    languages = [ruby, python, vb]
 
     print("Dynamically typed languages are:")
     for language in languages:

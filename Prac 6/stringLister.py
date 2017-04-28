@@ -17,8 +17,8 @@ class StringLister(App):
     def handle_string_printing(self):
         for string in STRINGS:
             label = Label(text=string)
-            self.root.ids.base_layout.add_widget(label)
-            #TODO Fix error caused here that crashes on start of program
+            # self.root.ids.base_layout.add_widget(label)
+            self.root.add_widget(label)
 
 
 StringLister().run()

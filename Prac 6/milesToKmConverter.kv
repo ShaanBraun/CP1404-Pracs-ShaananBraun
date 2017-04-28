@@ -12,7 +12,7 @@ BoxLayout:
             text: '1'
             id: text_input
             multiline: False
-            on_text_validate: app.handle_conversion(text_input.text)
+            on_text: app.handle_conversion(text_input.text)
         BoxLayout:
             orientation: 'vertical'
             Button:
