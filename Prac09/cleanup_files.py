@@ -26,7 +26,7 @@ def main():
         if dir_name != '.' and dir_name != (".\\" + TEMP_SAVE_FOLDER_NAME):
             for filename in os.listdir(dir_name):
                 if not os.path.isdir(filename):
-                    # print(fix_filename(filename))
+                    # print(fix_filename(filename)) #Debug
                     shutil.copy(os.path.join(dir_name, filename), 'temp/' + fix_filename(filename))
     print("Renaming complete, files saved to: " + os.path.join(os.getcwd(), TEMP_SAVE_FOLDER_NAME))
 
