@@ -6,69 +6,100 @@ import os, shutil
 
 __author__ = 'Shaanan Braun'
 
+TEMP_SAVE_FOLDER_NAME = "temp"
+TOP_FOLDER_NAME = "Lyrics"
+
 
 def main():
     print("Current directory is", os.getcwd())
 
     # change to desired directory
-    os.chdir('Lyrics/Christmas')
-    # print a list of all files (test)
-    # print(os.listdir('.'))
+    os.chdir(TOP_FOLDER_NAME)
 
-    # make a new directory
-    # os.mkdir('temp')
+    if TEMP_SAVE_FOLDER_NAME not in os.listdir("."):
+        os.mkdir(TEMP_SAVE_FOLDER_NAME)
 
-    # loop through each file in the (original) directory
-    for filename in os.listdir('.'):
-        # ignore directories, just process files
-        if not os.path.isdir(filename):
-            new_name = filename.replace(" ", "_").replace(".TXT", ".txt")
-            split_uppercase_joined_words(filename)
-            print(new_name)
+    for dir_name, subdir_list, file_list in os.walk('.'):
 
-            # Option 1: rename file to new name - in place
-            # os.rename(filename, new_name)
+        print(dir_name)
 
-            # Option 2: move file to new place, with new name
-            # shutil.move(filename, 'temp/' + new_name)
+        if dir_name != '.' and dir_name != (".\\" + TEMP_SAVE_FOLDER_NAME):
+            for filename in os.listdir(dir_name):
+                if not os.path.isdir(filename):
+                    # print(fix_filename(filename))
+                    shutil.copy(os.path.join(dir_name, filename), 'temp/' + fix_filename(filename))
+    print("Renaming complete, files saved to: " + os.path.join(os.getcwd(), TEMP_SAVE_FOLDER_NAME))
 
 
-            # Processing subdirectories using os.walk()
-            # os.chdir('..')
-            # for dir_name, subdir_list, file_list in os.walk('.'):
-            #     print("In", dir_name)
-            #     print("\tcontains subdirectories:", subdir_list)
-            #     print("\tand files:", file_list)
+def fix_filename(filename):
+    temp_string = strip_file_extension(filename)
+    # print(temp_string) #Debug
+    temp_string[0] = split_uppercase_joined_words(temp_string[0])
+    temp_string[0] = uppercase_words(temp_string[0])
+    temp_string[0] = space_to_underscores(temp_string[0])
+    temp_string[1] = temp_string[1].lower()
+
+    return ".".join(temp_string)
 
 
-def fix_name(name):
-    return name
+def split_uppercase_joined_words(string):
+    """
+    Splits string at uppercase characters and returns string with each subsequent string seperated by a space.
 
-
-def split_uppercase_joined_words(name):
-    name_parts = name.split()
-    name_split = []
-    for word in name_parts:
+    :param string:
+    :return:
+    """
+    string_parts = string.split()
+    string_split = []
+    for word in string_parts:
         temp_word = ""
         for letter in word:
-            if letter.isupper() and temp_word != "": #When finding an uppercase letter split save word and start new word.
+            if letter.isupper() and temp_word != "":  # When finding an uppercase letter split save word and start new word.
                 if not temp_word[-1].isalpha():
-                    if len(temp_word) > 1: #Only add previous word to list if it is not an empty string, ie has more than just the special character
-                        name_split.append(temp_word[:-1])
+                    if len(
+                            temp_word) > 1:  # Only add previous word to list if it is not an empty string, ie has more than just the special character
+                        string_split.append(temp_word[:-1])
                     temp_word = temp_word[-1]
                 else:
-                    name_split.append(temp_word)
+                    string_split.append(temp_word)
                     temp_word = ""
 
-            print(temp_word)
+            # print(temp_word)
             temp_word += letter
-        name_split.append(temp_word)
-    print(name_split)  # debug
-    return name_split
+        string_split.append(temp_word)
+
+    # print(name_split)  # debug
+    return " ".join(string_split)
 
 
-def space_to_underscores(name):
-    return name.replace(" ", "_")
+def uppercase_words(string):
+    """
+    Splits string and makes the first character of each word uppercase.
+
+    :param string:
+    :return:
+    """
+    string_parts = string.split()
+    string_final = []
+    for word in string_parts:
+        id = 0
+        for letter in word:
+            if letter.isalpha():
+                string_final.append(word[:id] + word[id].upper() + word[id + 1:])
+                break
+            id += 1
+
+
+            # print(string_final) #Debug
+    return " ".join(string_final)
+
+
+def strip_file_extension(string):
+    return string.split(".")
+
+
+def space_to_underscores(string):
+    return string.replace(" ", "_")
 
 
 main()
